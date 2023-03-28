@@ -1,0 +1,141 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>ตัดคำหยาบภาษาไทย</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"
+        rel="stylesheet">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            var dataTable = $('#sample_data').DataTable();
+            $('#sample_data').editable({
+                container: 'body',
+                selector: 'td.name',
+                url: '/updateemployee',
+                title: 'Name',
+                type: 'POST',
+                validate: function (value) {
+                    if ($.trim(value) == '') {
+                        return 'This field is required';
+                    }
+                }
+            });
+
+            $('#sample_data').editable({
+                container: 'body',
+                selector: 'td.email',
+                url: '/updateemployee',
+                title: 'Email',
+                type: 'POST',
+                validate: function (value) {
+                    if ($.trim(value) == '') {
+                        return 'This field is required';
+                    }
+                }
+            });
+
+            $('#sample_data').editable({
+                container: 'body',
+                selector: 'td.phone',
+                url: '/updateemployee',
+                title: 'Phone',
+                type: 'POST',
+                validate: function (value) {
+                    if ($.trim(value) == '') {
+                        return 'This field is required';
+                    }
+                }
+            });
+        });
+        function del(ID, title) {
+            if (confirm("Are you sure you want to delete '" + title + "'")) {
+                window.location.href = '/delete/' + ID;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    เพิ่มคำหยาบ
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <center>
+                        <h2>พจนานุกรมคำหยาบ</h2>
+                    </center>
+                    <table id="sample_data" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+
+                                <th>text</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in employee %}
+                            <tr>
+                                <td data-name="name" class="name" data-type="text" data-pk="{{row.id}}">{{row.text}}
+                                </td>
+                                <td><a href="javascript:del('{{row.id}}','{{row.name}}')"
+                                        class="btn btn-primary">Delete</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">เพิ่มคำหยาบในพจนานุกรมคำหยาบ</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" method="post" action="/add">
+                            <div class="form-group">
+                                <label class="col-form-label">พิมพ์คำหยาบในช่องว่าง:</label>
+                                <input type="text" class="form-control" id="txtname" name="txtname">
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input name="cmdsubmit" class="btn btn-primary" type="submit" value="Submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p><a href="/">กลับหน้าหลัก</a></p>
+
+    </div>
+    <script>
+        function eraseText() {
+            document.getElementById("newmm").value = "";
+        }
+    </script>
+</body>
+
+</html>
